@@ -52,9 +52,10 @@ all: .quicklisp/setup.lisp
 
 .PHONY: dev/swank
 dev/swank: .quicklisp/setup.lisp
-	$(sbcl)                                                                                   \
-		--eval '(ql:quickload :swank)'                                                    \
-		--eval '(let ((swank::*loopback-interface* "0.0.0.0")) (swank:create-server :port $(port_swank) :dont-close t) (loop while t do (sleep 1)))'
+	@$(sbcl)                               \
+		--eval '(ql:quickload :swank)' \
+		--eval '(let ((swank::*loopback-interface* "0.0.0.0")) (swank:create-server :port $(port_swank) :dont-close t))' \
+		--eval '(loop while t do (sleep 1))'
 
 .PHONY: dev/shell
 dev/shell: # run development environment shell
