@@ -1,5 +1,7 @@
 (defpackage apicl
-  (:use :cl))
+  (:use :cl)
+  (:export :run))
 (in-package :apicl)
 
-;; blah blah blah.
+(defun run ()
+  (format t "run!"))
