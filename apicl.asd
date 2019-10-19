@@ -2,7 +2,7 @@
   :version "0.1.0"
   :author "Dmitry Moskowski"
   :license ""
-  :depends-on ()
+  :depends-on ("clack")
   :components ((:module "src"
                 :components
                 ((:file "main"))))
