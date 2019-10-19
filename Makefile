@@ -23,15 +23,14 @@ tmux_session := $(PROJECT)/$(NAME)
 root := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 sbcl := sbcl --load $(root)/.quicklisp/setup.lisp
 
-shell_volume_nix       := nix
-shell_volume_quicklisp := quicklisp
+shell_volume_nix := nix
 
 container_archive := container.tar.gz
 
 ## reusable and long opts for commands inside rules
 
 shell_opts := -v $(shell_volume_nix):/nix:rw            \
-	-v $(shell_volume_quicklisp):/root/quicklisp:rw \
+	-v $(root)/.quicklisp:/root/quicklisp:rw        \
 	-v $(root):/chroot                              \
 	-e NIX_BUILD_CORES=$(NIX_BUILD_CORES)           \
 	-w /chroot                                      \
