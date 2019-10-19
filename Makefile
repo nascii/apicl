@@ -64,7 +64,7 @@ dev/shell: # run development environment shell
 		nix-shell --command "exec make dev/start-session"
 
 .PHONY: dev/session
-dev/start-session: # start development environment terminals with database, blockchain and one window per app
+dev/start-session: # start development environment terminals with swank server
 	$(tmux) has-session    -t $(tmux_session) && $(call fail,tmux session $(tmux_session) already exists$(,) use: '$(tmux) attach-session -t $(tmux_session)' to attach) || true
 	$(tmux) new-session    -s $(tmux_session) -n console -d
 
