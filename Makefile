@@ -49,6 +49,15 @@ all: .quicklisp/setup.lisp
 .quicklisp/setup.lisp: # initialize quicklisp directory
 	quicklisp init
 
+.PHONY: test
+test:
+	@$(sbcl) --non-interactive                                              \
+		--eval '(require "asdf")'                                       \
+		--eval '(push (car (directory #P".")) asdf:*central-registry*)' \
+		--eval '(asdf:load-system "$(PROJECT)")'                        \
+		--eval '(ql:quickload :rove)'                                   \
+		--eval '(rove:run :$(PROJECT)/tests)'
+
 .PHONY: dev/swank
 dev/swank: .quicklisp/setup.lisp
 	@$(sbcl)                               \
