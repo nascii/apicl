@@ -16,10 +16,11 @@ in with pkgs; stdenv.mkDerivation {
     git tmux gnumake
     sbcl
     lispPackages.quicklisp
+    lispPackages.swank
     openssl
   ];
   shellHook = ''
-  export LANG=en_US.UTF-8
+    export LANG=en_US.UTF-8
     export SHELL="${bashWrapper}"
     export NIX_PATH=nixpkgs=${nixpkgs}
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${openssl.out}/lib

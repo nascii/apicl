@@ -13,7 +13,9 @@ NIX_BUILD_CORES ?= 2
 
 ## bindings
 
-ports := 8040
+port_swank := 4005
+port_app   := 8040
+ports      := $(port_app) $(port_swank)
 
 tmux         := tmux -2 -f $(PWD)/.tmux.conf
 tmux_session := $(PROJECT)/$(NAME)
@@ -48,6 +50,12 @@ all: .quicklisp/setup.lisp
 .quicklisp/setup.lisp: # initialize quicklisp directory
 	quicklisp init
 
+.PHONY: dev/swank
+dev/swank: .quicklisp/setup.lisp
+	$(sbcl)                                                                                   \
+		--eval '(ql:quickload :swank)'                                                    \
+		--eval '(let ((swank::*loopback-interface* "0.0.0.0")) (swank:create-server :port $(port_swank) :dont-close t) (loop while t do (sleep 1)))'
+
 .PHONY: dev/shell
 dev/shell: # run development environment shell
 	@docker run --rm -it                   \
@@ -59,7 +67,11 @@ dev/shell: # run development environment shell
 dev/start-session: # start development environment terminals with database, blockchain and one window per app
 	$(tmux) has-session    -t $(tmux_session) && $(call fail,tmux session $(tmux_session) already exists$(,) use: '$(tmux) attach-session -t $(tmux_session)' to attach) || true
 	$(tmux) new-session    -s $(tmux_session) -n console -d
-	$(tmux) send-keys      -t $(tmux_session):0 C-z 'make' Enter
+
+	$(tmux) new-window     -t $(tmux_session):1 -n swank
+	$(tmux) send-keys      -t $(tmux_session):1 C-z 'make dev/swank' Enter
+
+	$(tmux) select-window  -t $(tmux_session):0
 
 	$(tmux) attach-session -t $(tmux_session)
 
