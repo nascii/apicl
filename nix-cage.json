@@ -1,0 +1,6 @@
+{
+    "mounts": {
+        "rw": [".", "~/.emacs.d", ["./.quicklisp", "~/quicklisp"]],
+        "tmpfs": ["~"]
+    }
+}

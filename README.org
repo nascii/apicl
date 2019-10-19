@@ -1,0 +1,13 @@
+* Apicl  - api boilerplate
+
+** Usage
+
+** Installation
+
+** Author
+
++ Dmitry Moskowski
+
+** Copyright
+
+Copyright (c) 2019 Dmitry Moskowski
