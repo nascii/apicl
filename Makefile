@@ -36,7 +36,7 @@ sbcl := sbcl $(shell if ! [ -t 0 ]; then echo --non-interactive; fi)  \
 	--load $(root)/.quicklisp/setup.lisp                          \
 	--eval '(require "asdf")'                                     \
 	--eval '(push (car (directory ".")) asdf:*central-registry*)' \
-	--eval '(asdf:load-system "$(PROJECT)")'
+	--eval '(ql:quickload :$(PROJECT))'
 
 shell_opts := -v $(shell_volume_nix):/nix:rw            \
 	-v $(root)/.quicklisp:/root/quicklisp:rw        \
