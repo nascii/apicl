@@ -1,10 +1,23 @@
 (defpackage apicl
-  (:use :cl :clack)
-  (:export :run))
+  (:use :cl)
+  (:export :*app*
+	   :mount :start :stop))
 (in-package :apicl)
 
-(defun run ()
-  (clack:clackup
-   (lambda (env)
-     (declare (ignore env))
-     '(200 (:content-type "text/plain") ("hello!")))))
+(defvar *app* (make-instance 'ningle:<app>))
+
+(defmacro defroute (app path params ((&rest arguments) &rest body))
+  `(setf (ningle:route ,app ,path ,@params)
+	 #'(lambda ,arguments ,@body)))
+
+(defun mount (app)
+  (defroute app "/" (:method :GET)
+	 ((params) "ok")))
+
+(defun start (app)   (clack:clackup app))
+(defun stop (server) (clack:stop server))
+
+;;
+
+(mount *app*)
+(start *app*)

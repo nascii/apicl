@@ -2,7 +2,7 @@
   :version "0.1.0"
   :author "Dmitry Moskowski"
   :license ""
-  :depends-on ("clack")
+  :depends-on ("clack" "ningle")
   :components ((:module "src"
                 :components
                 ((:file "main"))))
@@ -12,8 +12,7 @@
 (defsystem "apicl/tests"
   :author "Dmitry Moskowski"
   :license ""
-  :depends-on ("apicl"
-               "rove")
+  :depends-on ("apicl" "rove")
   :components ((:module "tests"
                 :components
                 ((:file "main"))))
