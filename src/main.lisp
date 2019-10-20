@@ -1,7 +1,7 @@
 (defpackage apicl
   (:use :cl)
   (:export :*app*
-	   :mount :start :stop))
+	   :mount :start :stop :serve))
 (in-package :apicl)
 
 (defvar *app* (make-instance 'ningle:<app>))
@@ -17,7 +17,7 @@
 (defun start (app)   (clack:clackup app))
 (defun stop (server) (clack:stop server))
 
-;;
 
-(mount *app*)
-(start *app*)
+(defun serve ()
+  (mount *app*)
+  (start *app*))

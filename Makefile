@@ -16,7 +16,7 @@ NIX_BUILD_CORES ?= 2
 root := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
 port_swank := 4005
-port_app   := 8040
+port_app   := 5000
 ports      := $(port_app) $(port_swank)
 
 tmux         := tmux -2 -f $(PWD)/.tmux.conf
@@ -60,7 +60,7 @@ all: .quicklisp/setup.lisp # prepare dependencies and build application
 
 .PHONY: run
 run: # run application
-	@$(sbcl) --eval '($(PROJECT):run)'
+	@$(sbcl) --eval '($(PROJECT):serve)'
 
 .PHONY: test
 test: # run application tests
