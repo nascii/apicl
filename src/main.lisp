@@ -6,17 +6,17 @@
 
 (defvar *app* (make-instance 'ningle:<app>))
 
-(defmacro defroute (app path params ((&rest arguments) &rest body))
-  `(setf (ningle:route ,app ,path ,@params)
+(defmacro defroute (path (&rest params) ((&rest arguments) &body body))
+  `(setf (ningle:route *app* ,path ,@params)
 	 #'(lambda ,arguments ,@body)))
 
 (defun mount (app)
-  (defroute app "/" (:method :GET)
-	 ((params) "ok")))
+  (let ((*app* app))
+    (defroute "/" (:method :GET)
+      ((params) "ok"))))
 
 (defun start (app)   (clack:clackup app))
 (defun stop (server) (clack:stop server))
-
 
 (defun serve ()
   (mount *app*)
