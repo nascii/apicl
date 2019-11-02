@@ -38,11 +38,15 @@ sbcl := sbcl $(shell if ! [ -t 0 ]; then echo --non-interactive; fi)  \
 	--eval '(push (car (directory ".")) asdf:*central-registry*)' \
 	--eval '(ql:quickload :$(PROJECT))'
 
-shell_opts := -v $(shell_volume_nix):/nix:rw            \
-	-v $(root)/.quicklisp:/root/quicklisp:rw        \
-	-v $(root):/chroot                              \
-	-e NIX_BUILD_CORES=$(NIX_BUILD_CORES)           \
-	-w /chroot                                      \
+shell_opts := -v $(shell_volume_nix):/nix:rw   \
+	-v $(shell_volume_go):/root/go/pkg:rw  \
+	-v $(root):/chroot                     \
+	-e COLUMNS=$(COLUMNS)                  \
+	-e LINES=$(LINES)                      \
+	-e TERM=$(TERM)                        \
+	-e NIX_BUILD_CORES=$(NIX_BUILD_CORES)  \
+	-w /chroot                             \
+	--hostname $(PROJECT).localhost        \
 	$(foreach v,$(ports), -p $(v):$(v) )
 
 ## macro

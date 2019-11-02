@@ -7,22 +7,31 @@ let
   bashWrapper = with pkgs; writeScript "shell-wrapper" ''
     #! ${stdenv.shell}
     export PS1="\e[0;34m\u@\h \w $ \e[m"
-    exec -a bash ${bashInteractive}/bin/bash --noprofile "$@"
+    exec -a bash ${bashInteractive}/bin/bash --rcfile .bashrc --noprofile "$@"
   '';
 in with pkgs; stdenv.mkDerivation {
   name = "apicl";
   buildInputs = [
-    nix cacert curl
-    git tmux gnumake
+    glibcLocales bashInteractive man
+    nix cacert curl utillinux coreutils
+    git jq tmux bash-completion gnumake
+    openssl
     sbcl
     lispPackages.quicklisp
     lispPackages.swank
-    openssl
   ];
   shellHook = ''
     export LANG=en_US.UTF-8
     export SHELL="${bashWrapper}"
     export NIX_PATH=nixpkgs=${nixpkgs}
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${openssl.out}/lib
+
+    local p
+    for p in $buildInputs
+    do
+      export XDG_DATA_DIRS="$XDG_DATA_DIRS:$p/share"
+    done
+
+    . ${bashCompletion}/etc/profile.d/bash_completion.sh
   '';
 }
